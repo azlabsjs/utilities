@@ -25,19 +25,16 @@ export const equals = (first: any, second: any) => {
   if (first === null || second === null) {
     return false;
   }
-  const t1 = typeof first;
-  const t2 = typeof second;
-  let length: number;
-  let key: any;
-  if (t1 === t2 && t1 === 'object') {
+  const typeofFirst = typeof first;
+  if (typeofFirst === typeof second && typeofFirst === 'object') {
     if (Array.isArray(first)) {
       if (!Array.isArray(second)) {
         return false;
       }
-      length = first.length;
+      const length = first.length;
       if (length === second.length) {
-        for (key = 0; key < length; key++) {
-          if (!equals(first[key], second[key])) {
+        for (let index = 0; index < length; index++) {
+          if (!equals(first[index], second[index])) {
             return false;
           }
         }
@@ -57,7 +54,7 @@ export const equals = (first: any, second: any) => {
           }
         })()
       );
-      for (key in second) {
+      for (let key in second) {
         if (!keySet.has(key) && typeof second[key] !== 'undefined') {
           return false;
         }
