@@ -1,11 +1,14 @@
-
 /**
  * @description Generic Javascript function type definition
  */
-export type Callable<Params extends any[] = unknown[], RType = unknown> = (...args: Params) => RType;
+export type Callable<Params extends any[] = unknown[], RType = unknown> = (
+  ...args: Params
+) => RType;
 
 // Unknown types utility functions
 export { shallowEqual, deepEqual } from './unknown';
+
+export { memoize } from './memoize';
 
 // Types utilities functions
 export {
@@ -27,6 +30,8 @@ export {
   isTypedArray,
   typeOf,
 } from './typeof';
+
+export { MemoizerOptions, CacheType, Compator } from './types';
 
 //TODO : Remove in future release as does not have any idea of what it's doing
 export const check =

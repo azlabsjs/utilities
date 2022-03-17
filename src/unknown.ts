@@ -1,6 +1,16 @@
+import { Compator } from './types';
+
 function isobject_(o: unknown) {
   return o != null && typeof o === 'object';
 }
+
+/**
+ * @description Compare the two javascript object/variables using the === operator
+ *
+ * @param a
+ * @param b
+ */
+export const strictEqual: Compator = (a: unknown, b: unknown) =>  a === b;
 
 /**
  *
@@ -14,7 +24,7 @@ function isobject_(o: unknown) {
  * @param a
  * @param b
  */
-export const shallowEqual = (a: unknown, b: unknown) => {
+export const shallowEqual: Compator = (a: unknown, b: unknown) => {
   if (a === b) {
     return true;
   }
@@ -98,7 +108,11 @@ export const shallowEqual = (a: unknown, b: unknown) => {
  * @param b
  * @param depth
  */
-export const deepEqual = (a: unknown, b: unknown, depth = Infinity) => {
+export const deepEqual: Compator = (
+  a: unknown,
+  b: unknown,
+  depth = Infinity
+) => {
   let lasResult = true;
   let currentDepth = 0;
   const recursiveFn = (_a: any, _b: any, _depth = Infinity) => {
