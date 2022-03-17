@@ -31,7 +31,7 @@ export {
   typeOf,
 } from './typeof';
 
-export { MemoizerOptions, CacheType, Compator } from './types';
+export { MemoizerOptions, Compator } from './types';
 
 //TODO : Remove in future release as does not have any idea of what it's doing
 export const check =

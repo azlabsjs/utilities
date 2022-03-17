@@ -5,3 +5,8 @@
 - Updated build configurations
 - Update typeof functions namespace
 -  Added shallowEqual and deepEqual
+
+
+# [0.1.6] 2022-03-17
+
+- Add method memoization implementation
