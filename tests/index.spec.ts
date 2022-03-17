@@ -1,39 +1,39 @@
 import {
-  equals,
-  hashCode,
+  deepEqual,
   isArrayLike,
   isBuffer,
   isDate,
   isDefined,
   isEmpty,
   isError,
-  isGeneratorFunction,
-  isGeneratorObj,
   isNullOrNaN,
   isNumber,
   isObject,
-  isObjectLike,
   isPlainObject,
   isPrimitive,
   isPrototype,
   isTypedArray,
-  maxNumberSize,
   typeOf,
 } from '../src';
+import {
+  isGeneratorFunction,
+  isGeneratorObj,
+  isObjectLike,
+} from '../src/internals';
 
 describe('Collection Class Test', () => {
   it('should evaluate whether two variables are equals', () => {
-    const result = equals(
+    const result = deepEqual(
       { lat: '3.4597', long: '1.234567' },
       new Object({ lat: '3.4597', long: '1.234567' })
     );
     expect(result).toBe(true);
-    expect(equals(undefined, undefined)).toBe(true);
-    expect(equals([], [])).toBe(true);
-    expect(equals([1, 2, 4, 5], [1, 2, 4, 5])).toBe(true);
-    expect(equals([1, 2, 4, 5], [1, 2, 5])).toBe(false);
+    expect(deepEqual(undefined, undefined)).toBe(true);
+    expect(deepEqual([], [])).toBe(true);
+    expect(deepEqual([1, 2, 4, 5], [1, 2, 4, 5])).toBe(true);
+    expect(deepEqual([1, 2, 4, 5], [1, 2, 5])).toBe(false);
     expect(
-      equals(
+      deepEqual(
         [
           {
             age: 15,
@@ -53,7 +53,7 @@ describe('Collection Class Test', () => {
       )
     ).toBe(true);
     expect(
-      equals(
+      deepEqual(
         [
           {
             age: 15,
@@ -130,17 +130,13 @@ describe('Collection Class Test', () => {
     expect(isNullOrNaN('Hello World!')).toBe(true);
   });
 
-  it('hasCode() should returns the same hash for the same string', () => {
-    expect(hashCode('Class')).toBe(hashCode('Class'));
-  });
-
   it('isError() should return false if object is not a javascript Error object', () => {
     expect(isError(new Error())).toBe(true);
     expect(isError('Error access resource')).toBe(false);
   });
 
   it('isGeneratorObj() should returns true if the object is a generator while is isGeneratorFunction() should return true if an object is a generator function', () => {
-    const generator = function*() {
+    const generator = function* () {
       yield 1;
     };
     expect(isGeneratorObj(generator())).toBe(true);
@@ -199,9 +195,5 @@ describe('Collection Class Test', () => {
     expect(typeOf(new Map())).toBe('map');
     expect(typeOf(new Set())).toBe('set');
     expect(typeOf(new WeakMap())).toBe('weakmap');
-  });
-
-  it('maxNumberSize() should returns the max integer size of the javascript lang', () => {
-    expect(maxNumberSize()).toBe(Number.MAX_SAFE_INTEGER);
   });
 });
