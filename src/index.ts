@@ -8,8 +8,6 @@ export type Callable<Params extends any[] = unknown[], RType = unknown> = (
 // Unknown types utility functions
 export { shallowEqual, deepEqual } from './unknown';
 
-export { memoize } from './memoize';
-
 // Types utilities functions
 export {
   isEmpty,
@@ -30,8 +28,6 @@ export {
   isTypedArray,
   typeOf,
 } from './typeof';
-
-export { MemoizerOptions, Compator } from './types';
 
 //TODO : Remove in future release as does not have any idea of what it's doing
 export const check =
