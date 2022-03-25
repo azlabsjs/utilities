@@ -1,6 +1,3 @@
-/**
- * @description Generic Javascript function type definition
- */
 export type Callable<Params extends any[] = unknown[], RType = unknown> = (
   ...args: Params
 ) => RType;
@@ -29,16 +26,5 @@ export {
   typeOf,
 } from './typeof';
 
-//TODO : Remove in future release as does not have any idea of what it's doing
-export const check =
-  (callback: { (arg0: string[]): any; name?: any; required: any[] }) =>
-  (params: string[] = []) => {
-    const { required } = callback;
-    const missing =
-      required?.filter((param: string) => !(param in params)) ?? [];
-    if (missing.length !== 0) {
-      throw new Error(`${callback.name}() Missing required parameter(s):
-    ${missing.join(', ')}`);
-    }
-    return callback(params);
-  };
+// Assertion functions
+export { assertRequiredArgs } from './assert';
