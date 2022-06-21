@@ -1,5 +1,5 @@
 {
-  "version": "0.1.9",
+  "version": "0.1.10",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
@@ -39,7 +39,8 @@
   "name": "@azlabsjs/utilities",
   "author": "azandrew-sidoine",
   "module": "dist/esm/index.js",
-  "size-limit": [{
+  "size-limit": [
+    {
       "path": "dist/cjs/index.js",
       "limit": "10 KB"
     },
