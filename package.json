@@ -15,8 +15,7 @@
     "prepare": "git config core.hookspath .githooks && ts-build build",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "test": "jest",
-    "betterer": "betterer --strict"
+    "test": "jest"
   },
   "husky": {
     "hooks": {
@@ -50,8 +49,6 @@
     }
   ],
   "devDependencies": {
-    "@betterer/cli": "^5.1.6",
-    "@betterer/typescript": "^5.1.6",
     "@azlabsjs/ts-build": "^0.1.16",
     "@size-limit/preset-small-lib": "^7.0.8",
     "@types/jest": "^27.4.1",

@@ -1,5 +1,5 @@
 function isobject_(o: unknown) {
-  return o != null && typeof o === 'object';
+  return o !== null && typeof o === 'object';
 }
 
 /**
