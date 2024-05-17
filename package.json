@@ -2,6 +2,7 @@
   "version": "0.1.12",
   "license": "MIT",
   "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
   "files": [
     "dist/**/*"
@@ -14,7 +15,6 @@
     "lint": "ts-build lint",
     "prepare": "git config core.hookspath .githooks && ts-build build",
     "size": "size-limit",
-    "analyze": "size-limit --why",
     "test": "jest"
   },
   "husky": {
@@ -30,9 +30,14 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.cjs",
-      "default": "./dist/cjs/index.cjs"
+      "import": {
+        "types": "./dist/types/index.d.mts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      }
     }
   },
   "name": "@azlabsjs/utilities",
@@ -49,7 +54,7 @@
     }
   ],
   "devDependencies": {
-    "@azlabsjs/ts-build": "^0.1.16",
+    "@azlabsjs/ts-build": "^0.4.21",
     "@size-limit/preset-small-lib": "^7.0.8",
     "@types/jest": "^27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
@@ -68,6 +73,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/azlabsjs/utilities.git"
+    "url": "git+https://github.com/azlabsjs/utilities.git"
   }
 }
