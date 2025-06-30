@@ -8,7 +8,7 @@
     "dist/**/*"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "build": "ts-build build",
@@ -69,6 +69,7 @@
     "jest-watch-typeahead": "^3.0.1",
     "prettier": "^3.6.2",
     "size-limit": "^11.2.0",
+    "structured-clone-polyfill": "^0.0.2",
     "ts-jest": "^29.4.0",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3"
