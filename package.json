@@ -1,5 +1,5 @@
 {
-  "version": "0.2.4",
+  "version": "0.2.9",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/esm/index.d.ts",
@@ -56,7 +56,7 @@
     }
   ],
   "devDependencies": {
-    "@azlabsjs/ts-build": "^0.5.15",
+    "@azlabsjs/ts-build": "^0.5.16",
     "@babel/runtime": "^7.27.6",
     "@eslint/js": "^9.30.0",
     "@size-limit/preset-small-lib": "^11.2.0",

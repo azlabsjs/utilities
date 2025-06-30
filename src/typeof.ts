@@ -8,16 +8,22 @@ import {
 } from './internals';
 import { UnknownType } from './types';
 
-export const isError = (value: unknown) => {
+/**
+ * checks if `value` is a valid javascript exception/error object
+ */
+export function isError(value: unknown) {
   return (
     value instanceof Error ||
     (typeof (value as Error)?.message === 'string' &&
       value?.constructor &&
       typeof (value?.constructor as UnknownType)?.stackTraceLimit === 'number')
   );
-};
+}
 
-export const isArguments = (value: UnknownType) => {
+/**
+ * checks if `value` is a variadic function parameter
+ */
+export function isArguments(value: UnknownType) {
   if (
     typeof value?.length === 'number' &&
     typeof value?.callee === 'function'
@@ -25,7 +31,7 @@ export const isArguments = (value: UnknownType) => {
     return true;
   }
   return false;
-};
+}
 
 /**
  * If you need to support Safari 5-7 (8-10 yr-old browser),
@@ -38,16 +44,22 @@ export const isBuffer = (value: UnknownType) => {
   return false;
 };
 
-export const isDate = (value: UnknownType) => {
+/**
+ * checks if provided value is a valid javascript date object
+ */
+export function isDate(value: UnknownType) {
   if (value instanceof Date) return true;
   return (
     typeof value.toDateString === 'function' &&
     typeof value.getDate === 'function' &&
     typeof value.setDate === 'function'
   );
-};
+}
 
-export const isRegexp = (value: UnknownType) => {
+/**
+ * checks if value is a regular expression object
+ */
+export function isRegexp(value: UnknownType) {
   if (value instanceof RegExp) return true;
   return (
     typeof value.flags === 'string' &&
@@ -55,32 +67,47 @@ export const isRegexp = (value: UnknownType) => {
     typeof value.multiline === 'boolean' &&
     typeof value.global === 'boolean'
   );
-};
+}
 
-export const isArrayLike = (value: UnknownType) => {
+/**
+ * checks if provided value is iterable or has `length` property
+ */
+export function isArrayLike(value: UnknownType) {
   return (
     value !== null &&
     typeof value !== 'function' &&
     isArrayLikeLength(value.length)
   );
-};
+}
 
-export const isTypedArray = (value: UnknownType) => {
+export function isTypedArray(value: UnknownType) {
   /** Used to match `toStringTag` values of typed arrays. */
   const reTypedTag =
     /^\[object (?:Float(?:32|64)|(?:Int|Uint)(?:8|16|32)|Uint8Clamped)Array\]$/;
   return isObjectLike(value) && reTypedTag.test(getTag(value));
-};
+}
 
-export const isPrototype = (value: unknown) => {
+/**
+ * Returns `true` if value if a prototype instead of object value
+ */
+export function isPrototype(value: unknown) {
   const constructor = value && (value as UnknownType).constructor;
   const prototype =
     (typeof constructor === 'function' && constructor.prototype) ||
     Object.prototype;
   return value === prototype;
-};
+}
 
-export const isEmpty = (value: UnknownType) => {
+/**
+ * Checks if a given data structure is empty.
+ *
+ * **Note**
+ *
+ *  Array and string are empty if `.length` property === 0.
+ *
+ *  Object is empty each key of the object returns a truthy value
+ */
+export function isEmpty(value: UnknownType) {
   if (value == null) {
     return true;
   }
@@ -108,29 +135,35 @@ export const isEmpty = (value: UnknownType) => {
     }
   }
   return true;
-};
+}
+
 /**
  * Check if the value of the object is not equals to null or undefined
- *
- * @param value
  */
-export const isDefined = (value: unknown) =>
-  typeof value !== 'undefined' && value !== null && value !== undefined;
+export function isDefined(value: unknown) {
+  return typeof value !== 'undefined' && value !== null && value !== undefined;
+}
 
 /**
  * Check if a given value is a JS object
  *
- * @param value
  */
-export const isObject = (value: unknown) =>
-  value !== null &&
-  !Array.isArray(value) &&
-  (typeof value === 'object' || typeof value === 'function');
+export function isObject<
+  T extends Record<string, UnknownType> = Record<string, UnknownType>,
+>(value: unknown): value is T {
+  return (
+    value !== null &&
+    !Array.isArray(value) &&
+    (typeof value === 'object' || typeof value === 'function')
+  );
+}
 
 /**
  * checks if `value` parameter is a plain javascipt object
  */
-export function isPlainObject(value: unknown) {
+export function isPlainObject<
+  T extends Record<string, UnknownType> = Record<string, UnknownType>,
+>(value: unknown): value is T {
   if (isObject(value) === false) return false;
 
   // If has modified constructor
@@ -152,30 +185,30 @@ export function isPlainObject(value: unknown) {
 }
 
 /**
- * @description Checks if a variable is of primitive type aka string|number|boolean
- * @param param [[any]]
+ * checks if a variable is of primitive type aka string|number|boolean|symbol
  */
-export const isPrimitive = (param: unknown) => {
-  switch (typeof param) {
+export function isPrimitive(
+  value: unknown
+): value is number | string | boolean | symbol {
+  switch (typeof value) {
     case 'string':
     case 'number':
     case 'boolean':
+    case 'symbol':
       return true;
   }
   return !!(
-    param instanceof String ||
-    param === String ||
-    param instanceof Number ||
-    param === Number ||
-    param instanceof Boolean ||
-    param === Boolean
+    value instanceof String ||
+    value === String ||
+    value instanceof Number ||
+    value === Number ||
+    value instanceof Boolean ||
+    value === Boolean
   );
-};
+}
 
-/**
- * @description Checks if the provided function parameter is of type number
- */
-export const isNumber = (value: unknown) => {
+/** checks if the provided function parameter is of type number */
+export function isNumber(value: unknown): value is number {
   if (value === null || typeof value === 'undefined') {
     return false;
   }
@@ -189,9 +222,11 @@ export const isNumber = (value: unknown) => {
   return (
     typeof value === 'number' || value instanceof Number || value === Number
   );
-};
+}
 
-export const isNullOrNaN = (value: unknown) => {
+export function isNullOrNaN(
+  value: unknown
+): value is null | undefined | typeof NaN {
   if (isObject(value) || isArray(value)) {
     return true;
   }
@@ -199,14 +234,16 @@ export const isNullOrNaN = (value: unknown) => {
     return true;
   }
   return isNaN(value as number);
-};
+}
 
 /**
  * @description Checks if a variable is of Array type
  * @param value
  * @returns
  */
-export const isArray = (value: unknown) => Array.isArray(value);
+export function isArray<T = UnknownType>(value: unknown): value is T[] {
+  return Array.isArray(value);
+}
 
 export const typeOf = (value: unknown) => {
   if (value === void 0) return 'undefined';
