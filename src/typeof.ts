@@ -6,18 +6,18 @@ import {
   isGeneratorObj,
   isObjectLike,
 } from './internals';
+import { UnknownType } from './types';
 
-export const isError = (value: any) => {
+export const isError = (value: unknown) => {
   return (
     value instanceof Error ||
-    (typeof value?.message === 'string' &&
+    (typeof (value as Error)?.message === 'string' &&
       value?.constructor &&
-      typeof value?.constructor?.stackTraceLimit === 'number')
+      typeof (value?.constructor as UnknownType)?.stackTraceLimit === 'number')
   );
 };
 
-
-export const isArguments = (value: any) => {
+export const isArguments = (value: UnknownType) => {
   if (
     typeof value?.length === 'number' &&
     typeof value?.callee === 'function'
@@ -31,14 +31,14 @@ export const isArguments = (value: any) => {
  * If you need to support Safari 5-7 (8-10 yr-old browser),
  * take a look at https://github.com/feross/is-buffer
  */
-export const isBuffer = (value: any) => {
+export const isBuffer = (value: UnknownType) => {
   if (value.constructor && typeof value.constructor.isBuffer === 'function') {
     return value.constructor.isBuffer(value);
   }
   return false;
 };
 
-export const isDate = (value: any) => {
+export const isDate = (value: UnknownType) => {
   if (value instanceof Date) return true;
   return (
     typeof value.toDateString === 'function' &&
@@ -47,7 +47,7 @@ export const isDate = (value: any) => {
   );
 };
 
-export const isRegexp = (value: any) => {
+export const isRegexp = (value: UnknownType) => {
   if (value instanceof RegExp) return true;
   return (
     typeof value.flags === 'string' &&
@@ -57,7 +57,7 @@ export const isRegexp = (value: any) => {
   );
 };
 
-export const isArrayLike = (value: any) => {
+export const isArrayLike = (value: UnknownType) => {
   return (
     value !== null &&
     typeof value !== 'function' &&
@@ -65,7 +65,7 @@ export const isArrayLike = (value: any) => {
   );
 };
 
-export const isTypedArray = (value: any) => {
+export const isTypedArray = (value: UnknownType) => {
   /** Used to match `toStringTag` values of typed arrays. */
   const reTypedTag =
     /^\[object (?:Float(?:32|64)|(?:Int|Uint)(?:8|16|32)|Uint8Clamped)Array\]$/;
@@ -73,14 +73,14 @@ export const isTypedArray = (value: any) => {
 };
 
 export const isPrototype = (value: unknown) => {
-  const constructor = value && (value as any).constructor;
+  const constructor = value && (value as UnknownType).constructor;
   const prototype =
     (typeof constructor === 'function' && constructor.prototype) ||
     Object.prototype;
   return value === prototype;
 };
 
-export const isEmpty = (value: any) => {
+export const isEmpty = (value: UnknownType) => {
   if (value == null) {
     return true;
   }
@@ -128,14 +128,13 @@ export const isObject = (value: unknown) =>
   (typeof value === 'object' || typeof value === 'function');
 
 /**
- *
- * @param value
+ * checks if `value` parameter is a plain javascipt object
  */
 export function isPlainObject(value: unknown) {
   if (isObject(value) === false) return false;
 
   // If has modified constructor
-  const constructor_ = (value as any).constructor;
+  const constructor_ = (value as UnknownType).constructor;
   if (constructor_ === undefined) return true;
 
   // If has modified prototype
@@ -186,7 +185,7 @@ export const isNumber = (value: unknown) => {
   if (isObjectLike(value)) {
     return false;
   }
-  value = isNaN(value as any) ? value : +(value as any);
+  value = isNaN(value as number) ? value : +(value as number);
   return (
     typeof value === 'number' || value instanceof Number || value === Number
   );
@@ -199,7 +198,7 @@ export const isNullOrNaN = (value: unknown) => {
   if (!isDefined(value)) {
     return true;
   }
-  return isNaN(value as any);
+  return isNaN(value as number);
 };
 
 /**
@@ -209,7 +208,7 @@ export const isNullOrNaN = (value: unknown) => {
  */
 export const isArray = (value: unknown) => Array.isArray(value);
 
-export const typeOf = (value: any) => {
+export const typeOf = (value: unknown) => {
   if (value === void 0) return 'undefined';
   if (value === null) return 'null';
   let type = typeof value as string;
@@ -285,3 +284,11 @@ export const typeOf = (value: any) => {
 
   return type.slice(8, -1).toLowerCase().replace(/\s/g, '');
 };
+
+export function isFunction<
+  T extends (...args: UnknownType[]) => UnknownType = (
+    ...args: UnknownType[]
+  ) => UnknownType,
+>(arg: unknown): arg is T {
+  return typeof arg === 'function';
+}

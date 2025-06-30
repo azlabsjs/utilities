@@ -14,6 +14,7 @@ import {
   isPrototype,
   isTypedArray,
   typeOf,
+  isFunction,
 } from '../src';
 import {
   isGeneratorFunction,
@@ -195,5 +196,16 @@ describe('Collection Class Test', () => {
     expect(typeOf(new Map())).toBe('map');
     expect(typeOf(new Set())).toBe('set');
     expect(typeOf(new WeakMap())).toBe('weakmap');
+  });
+
+  it('isFunction returns true if argument is a function and false else', () => {
+    function greet(name: string) {
+      return `Hello ${name}!`;
+    }
+
+    const result = isFunction(greet);
+
+    expect(result).toEqual(true);
+    expect(isFunction('Hello')).toEqual(false);
   });
 });

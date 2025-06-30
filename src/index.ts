@@ -1,6 +1,9 @@
-export type Callable<Params extends any[] = unknown[], RType = unknown> = (
-  ...args: Params
-) => RType;
+import { UnknownType } from './types';
+
+export type Callable<
+  Params extends UnknownType[] = unknown[],
+  RType = unknown,
+> = (...args: Params) => RType;
 
 // Unknown types utility functions
 export { shallowEqual, deepEqual } from './unknown';
@@ -24,6 +27,7 @@ export {
   isRegexp,
   isTypedArray,
   typeOf,
+  isFunction
 } from './typeof';
 
 // Assertion functions

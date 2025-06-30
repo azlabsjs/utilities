@@ -1,14 +1,9 @@
-function isobject_(o: unknown) {
+function isobject_(o: unknown): o is Record<string, unknown> {
   return o !== null && typeof o === 'object';
 }
 
-/**
- * @description Compare the two javascript object/variables using the === operator
- *
- * @param a
- * @param b
- */
-export const strictEqual = (a: unknown, b: unknown) =>  a === b;
+/** @description Compare the two javascript object/variables using the === operator */
+export const strictEqual = (a: unknown, b: unknown) => a === b;
 
 /**
  *
@@ -17,30 +12,25 @@ export const strictEqual = (a: unknown, b: unknown) =>  a === b;
  * @example
  * const result = shallowEqual({lat: 3.9855, long: 1.98204}, {}); // false
  *
- * const result = shallowEqual({lat: 3.9855, long: 1.98204}, {lat: 3.9855, long: 1.98204}); // true
- *
- * @param a
- * @param b
+ * const result = shallowEqual({lat: 3.9855, long: 1.98204}, {lat: 3.9855, long: 1.98204});
  */
 export const shallowEqual = (a: unknown, b: unknown) => {
   if (a === b) {
     return true;
   }
   if (isobject_(a) && isobject_(b)) {
-    const _a = a as any;
-    const _b = b as any;
     if (
-      (Array.isArray(_a) && !Array.isArray(_b)) ||
-      (Array.isArray(_a) && !Array.isArray(_b))
+      (Array.isArray(a) && !Array.isArray(b)) ||
+      (Array.isArray(a) && !Array.isArray(b))
     ) {
       return false;
     }
-    const aKeys = Object.keys(_a);
-    if (aKeys.length !== Object.keys(_b).length) {
+    const aKeys = Object.keys(a);
+    if (aKeys.length !== Object.keys(b).length) {
       return false;
     }
     for (const key of aKeys) {
-      if (_a[key] !== _b[key]) {
+      if (a[key] !== b[key]) {
         return false;
       }
     }
@@ -106,49 +96,55 @@ export const shallowEqual = (a: unknown, b: unknown) => {
  * @param b
  * @param depth
  */
-export const deepEqual = (
-  a: unknown,
-  b: unknown,
-  depth = Infinity
-) => {
-  let lasResult = true;
-  let currentDepth = 0;
-  const recursiveFn = (_a: any, _b: any, _depth = Infinity) => {
+export const deepEqual = (a: unknown, b: unknown, depth = Infinity) => {
+  let result = true;
+  let track = 0;
+  const fn = (_a: unknown, _b: unknown, _depth = Infinity) => {
     if (a === b) {
-      lasResult = true;
-      return lasResult;
+      result = true;
+      return result;
     }
-    if (currentDepth === _depth) {
-      return lasResult;
+
+    if (track === _depth) {
+      return result;
     }
-    currentDepth++;
+
+    track++;
     if (
       (Array.isArray(_a) && !Array.isArray(_b)) ||
       (Array.isArray(_a) && !Array.isArray(_b))
     ) {
-      lasResult = false;
-      return lasResult;
+      result = false;
+      return result;
     }
-    const aKeys = Object.keys(_a);
-    if (aKeys.length !== Object.keys(_b).length) {
-      lasResult = false;
-      return lasResult;
-    }
-    for (const key of aKeys) {
-      const valueOfA = _a[key] as any;
-      const valueOfB = _b[key] as any;
-      const areObjects = isobject_(valueOfA) && isobject_(valueOfB);
-      if (
-        (areObjects && !recursiveFn(valueOfA, valueOfB, _depth)) ||
-        (!areObjects && valueOfA !== valueOfB)
-      ) {
-        lasResult = false;
-        return lasResult;
+
+    if (isobject_(_a) && isobject_(_b)) {
+      const aKeys = Object.keys(_a);
+      if (aKeys.length !== Object.keys(_b).length) {
+        result = false;
+        return result;
       }
+      for (const key of aKeys) {
+        const valueOfA = _a[key];
+        const valueOfB = _b[key];
+        const areObjects = isobject_(valueOfA) && isobject_(valueOfB);
+        if (
+          (areObjects && !fn(valueOfA, valueOfB, _depth)) ||
+          (!areObjects && valueOfA !== valueOfB)
+        ) {
+          result = false;
+          return result;
+        }
+      }
+      result = true;
+    } else {
+      result = a === b;
     }
-    lasResult = true;
-    return lasResult;
+
+    return result;
   };
-  recursiveFn(a, b, depth);
-  return lasResult;
+
+  fn(a, b, depth);
+
+  return result;
 };

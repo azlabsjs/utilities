@@ -1,5 +1,7 @@
+import { UnknownType } from './types';
+
 // @internal
-export const getTag = (value: any) => {
+export const getTag = (value: UnknownType) => {
   if (value == null) {
     return value === undefined ? '[object Undefined]' : '[object Null]';
   }
@@ -7,7 +9,7 @@ export const getTag = (value: any) => {
 };
 
 // @internal
-export const constructorName = (value: any) => {
+export const constructorName = (value: UnknownType) => {
   return typeof value?.constructor === 'function'
     ? value?.constructor?.name
     : undefined;
@@ -26,11 +28,11 @@ export const isArrayLikeLength = (value: number) => {
 };
 
 // @internal
-export const isObjectLike = (value: any) =>
+export const isObjectLike = (value: UnknownType) =>
   value !== null && typeof value === 'object';
 
 // @internal
-export const isGeneratorObj = (value: any) =>
+export const isGeneratorObj = (value: UnknownType) =>
   typeof value.throw === 'function' &&
   typeof value.return === 'function' &&
   typeof value.next === 'function';
